@@ -1,0 +1,148 @@
+<script type="text/javascript">
+  angular.module('pencilblueApp')
+    .controller('MatchController', function($scope, $sce, $http) {
+    ^angular_objects^
+
+    // Set default value for statistics type
+    $scope.statType = "goal";
+
+    // Which goal the assisting player search is shown
+    $scope.assistForGoal = null;
+
+    // Regex pattern to match statistics time:
+    // Minutes 1-9 | minutes from 10-89 and 90| 
+    const gameTimeRegex = "^[1-9]$|^[1-8][0-9]$|^90$";
+    // 1st half over time: 45 minutes + 1-9 extra time minutes |
+    // 2nd half over time: 90 minutes + 1-9 extra time minutes
+    const extraTimeRegex = "|^45\\+[1-9]$|^90\\+[1-9]$";
+    
+    // Combine to single regex
+    $scope.statTimeRegex = gameTimeRegex + extraTimeRegex;
+
+    //////////////////////////////////////////////////////
+    //
+    // Add new statistics
+    //
+    //////////////////////////////////////////////////////
+    $scope.addGoal = function() {
+      const newGoal = {
+        "type": $scope.statType,
+        "matchId": $scope.selected._id,
+        "playerId": $scope.player._id,
+        "playerName": $scope.player.name
+      };
+
+      // Get stat time
+      $scope.getStatTime(newGoal, $scope.statTime);
+      
+      // Send to server
+      $scope.addStat(newGoal);
+     };
+
+    /////////////////////////////////////////////////////
+    //
+    // Send new statistics data to the server.
+    //
+    /////////////////////////////////////////////////////
+    $scope.addStat = function(newStat) {
+      $http.post("/club-manager/api/stats", newStat)
+      .then(
+        function(response) {
+          // Set stat id that was returned by the server.
+          newStat._id = response.data;
+          $scope.selected.stats.push(newStat);
+        } 
+      );
+    };
+
+
+    /////////////////////////////////////////////////////
+    //
+    // Add assist
+    //
+    /////////////////////////////////////////////////////
+    $scope.addAssist = function(goal) {
+      const newAssist = {
+        "type": "assist",
+        "goalId": goal._id,
+        "matchId": goal.matchId,
+        "playerId": $scope.assistPlayer._id,
+        "playerName": $scope.assistPlayer.name
+      };
+      console.log($scope.assistPlayer);
+
+      // Send to server
+      $scope.addStat(newAssist);
+    };
+
+    //////////////////////////////////////////////////////
+    //
+    // Get statistics time
+    //
+    //////////////////////////////////////////////////////
+    $scope.getStatTime = function(newStat, time) {
+      // Stat time is validated for time+extra minutes,
+      // where extra time is optional. For example 45+2.
+      const statTimes = time.split('+');
+      newStat.time = Number(statTimes[0]);
+      
+      // Add extra time if available
+      if(statTimes.length > 1) {
+        newStat.extraTime = Number(statTimes[1]);
+      }
+    };
+
+    /////////////////////////////////////////////////////
+    //
+    // Delete existing statistic
+    //
+    /////////////////////////////////////////////////////
+    $scope.deleteStat = function(stat) {
+      $http.post("/club-manager/api/deleteStats", { id: stat._id, type: stat.type })
+      .then(
+        function(response) {
+          angular.forEach($scope.selected.stats, function(obj, i) {
+            if($scope.selected.stats[i]._id === stat._id) {
+              // Remove deleted stat from the UI.
+              $scope.selected.stats.splice(i, 1);
+              return;
+            }
+          });
+        }
+      );
+    };
+
+    /////////////////////////////////////////////////////
+    //
+    // Get statistics icon
+    //
+    /////////////////////////////////////////////////////
+    $scope.getStatIcon = function(statType) {
+      if(statType === "goal") {
+        return "fa fa-futbol-o";
+      }
+      else if(statType === "assist") {
+        return "fa fa-user-plus";
+      }
+      else if(statType === "warning") {
+        return "fa fa-bookmark-o";
+      }
+      else if(statType === "penalty") {
+        return "fa fa-bookmark";
+      }
+      else {
+        return "fa fa-question";
+      }
+    };
+
+    /////////////////////////////////////////////////////
+    //
+    // Show assisting player search for given goal.
+    //
+    /////////////////////////////////////////////////////
+    $scope.showAssistControls = function(goal) {
+      $scope.assistForGoal = goal._id;
+    };
+  });
+</script>
+

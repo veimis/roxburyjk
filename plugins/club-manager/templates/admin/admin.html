@@ -1,0 +1,29 @@
+^tmp_admin=head^
+<div class="col-md-9">
+    ^tmp_admin=elements=error_success^
+    ^tmp_admin=elements=sub_nav^
+    ^tmp_admin=elements=tab_nav^
+</div>
+^angular^
+<div class="col-md-9">
+  <div class="row">
+  <div class="tab-content">
+    <div class="tab-pane" id="teams">
+      <h3>Teams</h3> 
+      <p>Teams are modified in the <a href="/admin/content/objects/types">Custom objects view</a> (Content/Custom objects/cm_team).</p>
+    </div>
+    <div class="tab-pane" id="players">
+      <h3>Players</h3> 
+      <p>Players are modified in the <a href="/admin/content/objects/types">Custom objects view</a> (Content/Custom objects/cm_player).</p>
+    </div>
+    <div class="tab-pane" id="seasons">
+      <h3>Seasons</h3> 
+      <p>Seasons are modified in the <a href="/admin/content/objects/types">Custom objects view</a> (Content/Custom objects/cm_season).</p>
+    </div>    
+    <div class="tab-pane active" id="matches">
+      ^tmp_admin=match_report^
+    </div>
+  </div>
+  </div>
+</div>
+^tmp_admin=footer^
