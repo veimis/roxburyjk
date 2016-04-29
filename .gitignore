@@ -19,6 +19,8 @@ plugins/*
 !plugins/sample/**
 !plugins/wp_import
 !plugins/wp_import/**
+!plugins/club-manager/
+!plugins/club-manager/**
 **/node_modules
 **/node_modules/**
 config.json
