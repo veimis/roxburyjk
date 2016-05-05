@@ -10,17 +10,21 @@
   <div class="panel-body">
     <h6> {{match.date | date:'EEEE yyyy-MM-dd'}}</h6>
     <section ng-bind-html="match.description"></section>
-<table class="table">
-	  <tbody>
-	    <tr ng-repeat="stat in match.stats">
-		  <th>{{stat.time}}</th>
-		  <th>#{{stat.player.number}} <a ng-href="/club-manager/player/?name={{stat.player.name}}">
-			  {{stat.player.name}}
-		  </a></th>
-		  <th>{{stat.name}}</th>
-		</tr>
-	  </tbody>
-	</table>
-  </div>
+    <ul class="list-group">
+      <li class="list-group-item" ng-repeat="stat in match.stats | filter:{type: '!assist'} | orderBy:'time'">
+        {{stat.time}}
+        {{stat.extraTime ? "+" + stat.extraTime : ''}}&apos;
+        <i ng-class="statistics.getIcon(stat.type)"></i>
+        <a ng-href="/club-manager/player/?name={{stat.playerName}}">
+          {{stat.playerName}}
+        </a> 
+        <span ng-repeat="assist in match.stats | filter: {type: 'assist', goalId: stat._id}">
+          <i ng-class="statistics.getIcon(assist.type)"></i>
+          <a ng-href="/club-manager/player/?name={{assist.playerName}}">
+            {{assist.playerName}}
+          </a> 
+        </span>
+      </li>
+    <ul>
+ </div>
 </div>
-{{stats}}

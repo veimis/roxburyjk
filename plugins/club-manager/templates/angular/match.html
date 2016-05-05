@@ -1,6 +1,28 @@
 <script type="text/javascript">
-  angular.module('pencilblueApp')
-    .controller('MatchController', function($scope, $sce) {
+  angular.module('pencilblueApp').service('statistics', function() {
+    this.getIcon = function(type) {
+      console.log(type);
+     if(type === "goal") {
+        return "fa fa-futbol-o";
+      }
+      else if(type === "assist") {
+        return "fa fa-user-plus";
+      }
+      else if(type === "warning") {
+        return "fa fa-bookmark-o";
+      }
+      else if(type === "penalty") {
+        return "fa fa-bookmark";
+      }
+      else {
+        return "fa fa-question";
+      }
+    };
+  });
+
+angular.module('pencilblueApp')
+    .controller('MatchController', function($scope, $sce, statistics) {
+    $scope.statistics = statistics;
     ^angular_objects^
   });
 </script>

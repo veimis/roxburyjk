@@ -44,7 +44,7 @@ MatchStatistics.uninstall = function (dao, util, cb) {
 // cb = callback(error, data)
 MatchStatistics.loadByMatch = function(matchId, dao, util, cb) {
   const opts = {
-    where: { matchId: matchId}
+    where: {matchId: matchId.toString()}
   };
   dao.q(dbName, opts, cb);
 };
