@@ -5,7 +5,8 @@ var async = require('async');
 var cmUtils = require('./club_manager_utils.js');
 
 function Player(){}
-var dbName = 'cm_player';
+const dbName = 'cm_player';
+const querySelection = ['name', 'number', 'description', 'profilePicture'];
 
 // Add new custom object type
 // cos = pencilblue custom object service
@@ -44,22 +45,44 @@ Player.uninstall = function (cos, util, cb) {
 // ms = pencilblue media service
 // cb = callback(err, data)
 Player.getAll = function (cos, util, ms, cb) {
-	var selection = ['name', 'number', 'description', 'profilePicture'];
-
-	cmUtils.queryCustomObjects(cos, util, dbName, selection, function(err, data) {
+	cmUtils.queryCustomObjects(cos, util, dbName, querySelection, function(err, data) {
     
     // Fetch profile picture media for each player
-    async.each(data, function(player, cb) {
-      ms.loadById(player.profilePicture, function(err, result) {
-        // Replace media id with the media location.
-        // Location is used in the template with ngSrc.
-        player.profilePicture = result.location;
-        cb(err);
-      }); 
-    }, function(err) {
+    async.each(data, getProfilePicture, function(err) {
       cb(err, data);
     });
   });
+};
+
+// Query player by name
+// cos = pencilblue custom object service
+// util = pencilblue utilities
+// ms = pencilblue media service
+// cb = callback(err, result)
+Player.findByName = function(name, cos, util, ms, cb)
+{
+  const opts = {
+    select: querySelection,
+    where: {name: name}
+  };
+  cmUtils.queryCustomObjects(cos, util, dbName, opts, function(err, players) {
+    if(players.length > 0) {
+      getProfilePicture(players[0], ms, function(err) {
+        cb(err, players[0]);
+      });
+    } else {
+      cb(err, {});
+    }
+  });
+};
+
+function getProfilePicture(player, ms, cb) {
+  ms.loadById(player.profilePicture, function(err, result) {
+    // Replace media id with the media location.
+    // Location is used in the template with ngSrc.
+    player.profilePicture = result.location;
+    cb(err);
+ });
 };
 
 module.exports = Player;

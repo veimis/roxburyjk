@@ -1,6 +1,7 @@
 <script type="text/javascript">
   angular.module('pencilblueApp')
-    .controller('TeamController', function($scope, $sce) {
+    .controller('TeamController', function($scope, $sce, statistics) {
+      $scope.statistics = statistics;
       ^angular_objects^
 
       // Update the selected player.

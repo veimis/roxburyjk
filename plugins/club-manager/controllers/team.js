@@ -54,7 +54,7 @@ module.exports = function(pb) {
         var ok = self.ts.registerLocal('angular', function(flag, cb) {
           var angularData = pb.ClientJs.getAngularController({}, ['ngSanitize']);
           cb(null, angularData);
-        });        
+        }); 
         
         // Load team template
         self.ts.load('team', function(err, result) {

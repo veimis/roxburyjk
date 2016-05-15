@@ -77,8 +77,8 @@ clubManagerUtils.queryCustomObjects = function(	cos, util, objectName,
 		},
 		function getCustomObjects(typeId, cb) {
 			cos.findByType(	typeId.toString(), options, 
-											function(err, results) {
-				cb(err, results);
+        function(err, results) {
+          cb(err, results);
 			});
 		}], cb
 	);

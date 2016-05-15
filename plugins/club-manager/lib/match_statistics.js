@@ -1,5 +1,6 @@
 // Exports match statistics module
 
+const async = require('async');
 
 function MatchStatistics(){}
 var dbName = "cm_match_statistics";
@@ -37,18 +38,6 @@ MatchStatistics.uninstall = function (dao, util, cb) {
   });
 };
 
-// Query match statistics for a match
-// matchID: Match object database ID.
-// dao = pencilblue data access object
-// util = pencilblue utilities
-// cb = callback(error, data)
-MatchStatistics.loadByMatch = function(matchId, dao, util, cb) {
-  const opts = {
-    where: {matchId: matchId.toString()}
-  };
-  dao.q(dbName, opts, cb);
-};
-
 // Save new statistics to persist database.
 // data:  Object to persist.
 // dao = pencilblue data access object
@@ -78,6 +67,53 @@ MatchStatistics.delete = function(statId, type, dao, util, cb) {
       cb(err, result);
     }
   });
+};
+
+// Query match statistics for a match
+// matchID: Match object database ID.
+// dao = pencilblue data access object
+// util = pencilblue utilities
+// cb = callback(error, data)
+MatchStatistics.loadByMatch = function(matchId, dao, util, cb) {
+  const opts = {
+    where: {matchId: matchId.toString()}
+  };
+  dao.q(dbName, opts, cb);
+};
+
+// Query statistics for a player
+// playerId: Player object database ID.
+// dao = pencilblue data access object
+// util = pencilblue utilities
+// cb = callback(error, data)
+MatchStatistics.loadByPlayer = function(playerId, dao, util, cb) {
+  const opts = {
+    where: {playerId: playerId.toString()}
+  };
+  dao.q(dbName, opts, cb);
+};
+
+// Query statistics aggregates
+// playerId: Player object database ID.
+// dao = pencilblue data access object
+// util = pencilblue utilities
+// cb = callback(error, data)
+//      data = {goals, assists, warnings, penalties}
+MatchStatistics.loadPlayerTotals = function(playerId, dao, util, cb) {
+  const countQuery = function(type, callback) {
+    const where = {
+      playerId: playerId.toString(),
+      type: type 
+    };
+    dao.count(dbName, where, callback);   
+  };
+
+  async.parallel({
+    goals: async.apply(countQuery, "goal"),
+    assists: async.apply(countQuery, "assist"),
+    warnings: async.apply(countQuery, "waring"),
+    penalties: async.apply(countQuery, "penalty")
+  }, cb);
 };
 
 module.exports = MatchStatistics;

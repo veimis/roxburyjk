@@ -1,0 +1,35 @@
+^tmp_head^
+  <div class="container" ng-controller="PlayerController">
+    <div class="row">
+      <div class="col-sm-4">
+        <img class="img-responsive" ng-src="{{player.profilePicture}}" alt="profile image" />
+      </div>
+      <div class="col-sm-8">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span class="panel-title">
+              {{player.name}} #{{player.number}}
+            </span>
+          </div>
+          <div class="panel-body">
+            <p>{{player.description}}</p>
+          </div>
+        </div>
+        <div style="font-size:34px">
+          <i ng-class="statistics.getIcon('goal')"></i>
+          {{player.stats.goals}}
+          <i ng-class="statistics.getIcon('assist')"></i>
+          {{player.stats.assists}}
+          <i ng-class="statistics.getIcon('warning')"></i>
+          {{player.stats.warnings}}
+          <i ng-class="statistics.getIcon('penalty')"></i>
+          {{player.stats.penalties}}
+        </div>
+      </div>
+    </div>
+  </div>
+  ^angular^
+  ^tmp_angular=statsService^
+  ^tmp_angular=player^
+^tmp_footer^
+

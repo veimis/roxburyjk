@@ -39,7 +39,9 @@ module.exports = function(pb) {
   };
 
   ///////////////////////////////////////////////////////////////////
+  //
   // Save new statistics
+  //
   ///////////////////////////////////////////////////////////////////
   MatchApiController.prototype.saveStats = function(cb) {
     matchStats.save(this.body, new pb.DAO(), util, function(err, result) {
@@ -53,7 +55,9 @@ module.exports = function(pb) {
   };
 
   ///////////////////////////////////////////////////////////////////
+  //
   // Delete statistics
+  // 
   ///////////////////////////////////////////////////////////////////
   MatchApiController.prototype.deleteStats = function(cb) {
     matchStats.delete(this.body.id, this.body.type, new pb.DAO(), util, function(err, result) {
