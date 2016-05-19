@@ -5,8 +5,9 @@
       ^angular_objects^
 
       // Update the selected player.
-      $scope.showDetails = function(player) {
-        $scope.selected  = player
+      $scope.showDetails = function(player, teamElementId) {
+        $scope.selected = player;
+        angular.element(document).find('#'+teamElementId).collapse('hide');
       };
     });
 </script>

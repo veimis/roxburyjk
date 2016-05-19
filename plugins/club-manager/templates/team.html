@@ -17,7 +17,7 @@
             <a class="list-group-item" 
               href="#" 
               ng-repeat="player in team.players" 
-              ng-click="showDetails(player)"
+              ng-click="showDetails(player, team._id)"
             >
               {{player.name}} #{{player.number}}
             </a>
