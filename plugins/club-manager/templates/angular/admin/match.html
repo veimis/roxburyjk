@@ -1,6 +1,7 @@
 <script type="text/javascript">
   angular.module('pencilblueApp')
-    .controller('MatchController', function($scope, $sce, $http) {
+    .controller('MatchController', function($scope, $sce, $http, statistics) {
+    $scope.statistics = statistics;
     ^angular_objects^
 
     // Set default value for statistics type
@@ -24,19 +25,22 @@
     // Add new statistics
     //
     //////////////////////////////////////////////////////
-    $scope.addGoal = function() {
-      const newGoal = {
+    $scope.addStat = function() {
+      const newStat = {
         "type": $scope.statType,
         "matchId": $scope.selected._id,
-        "playerId": $scope.player._id,
-        "playerName": $scope.player.name
       };
 
+      if($scope.statType !== 'opponent goal') {
+        newStat.playerId = $scope.player._id;
+        newStat.playerName = $scope.player.name;
+      }
+
       // Get stat time
-      $scope.getStatTime(newGoal, $scope.statTime);
+      $scope.getStatTime(newStat, $scope.statTime);
       
       // Send to server
-      $scope.addStat(newGoal);
+      $scope.postStat(newStat);
      };
 
     /////////////////////////////////////////////////////
@@ -44,7 +48,7 @@
     // Send new statistics data to the server.
     //
     /////////////////////////////////////////////////////
-    $scope.addStat = function(newStat) {
+    $scope.postStat = function(newStat) {
       $http.post("/club-manager/api/stats", newStat)
       .then(
         function(response) {
@@ -69,10 +73,13 @@
         "playerId": $scope.assistPlayer._id,
         "playerName": $scope.assistPlayer.name
       };
-      console.log($scope.assistPlayer);
 
       // Send to server
-      $scope.addStat(newAssist);
+      $scope.postStat(newAssist);
+
+      // Clear assist controls
+      $scope.assistForGoal = null;
+      $scope.assistPlayer = null;
     };
 
     //////////////////////////////////////////////////////
@@ -114,35 +121,18 @@
 
     /////////////////////////////////////////////////////
     //
-    // Get statistics icon
-    //
-    /////////////////////////////////////////////////////
-    $scope.getStatIcon = function(statType) {
-      if(statType === "goal") {
-        return "fa fa-futbol-o";
-      }
-      else if(statType === "assist") {
-        return "fa fa-user-plus";
-      }
-      else if(statType === "warning") {
-        return "fa fa-bookmark-o";
-      }
-      else if(statType === "penalty") {
-        return "fa fa-bookmark";
-      }
-      else {
-        return "fa fa-question";
-      }
-    };
-
-    /////////////////////////////////////////////////////
-    //
     // Show assisting player search for given goal.
+    // Hide controls if pressed again.
     //
     /////////////////////////////////////////////////////
     $scope.showAssistControls = function(goal) {
-      $scope.assistForGoal = goal._id;
+      if($scope.assistForGoal === goal._id) {
+        $scope.assistForGoal = null;
+      } else {
+        $scope.assistForGoal = goal._id;
+      }
     };
   });
+
 </script>
 
