@@ -30,7 +30,10 @@ if (env.OPENSHIFT_GEAR_DNS) {
       "plugins": {
          "caching": useMemory
       }
-   };
+      "media": {
+          "parent_dir": env.OPENSHIFT_DATA_DIR
+      }   
+    };
    if (env.OPENSHIFT_HAPROXY_VERSION) {
       // Scaled application
       config.cluster = {
