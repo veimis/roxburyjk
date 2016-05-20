@@ -7,7 +7,9 @@
       // Update the selected player.
       $scope.showDetails = function(player, teamElementId) {
         $scope.selected = player;
-        angular.element(document).find('#'+teamElementId).collapse('hide');
+        if(window.innerWidth < 768) {
+          angular.element(document).find('#' + teamElementId).collapse('hide'); 
+        }
       };
     });
 </script>
