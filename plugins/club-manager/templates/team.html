@@ -16,7 +16,7 @@
           <div id="{{team._id}}" class="panel-collapse collapse">
             <a class="list-group-item" 
               href="#" 
-              ng-repeat="player in team.players" 
+              ng-repeat="player in team.players | orderBy: 'name'" 
               ng-click="showDetails(player, team._id)"
             >
               {{player.name}} #{{player.number}}
