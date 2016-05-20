@@ -29,7 +29,7 @@ if (env.OPENSHIFT_GEAR_DNS) {
       "templates": useMemory,
       "plugins": {
          "caching": useMemory
-      }
+      },
       "media": {
           "parent_dir": env.OPENSHIFT_DATA_DIR
       }   
