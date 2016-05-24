@@ -18,6 +18,7 @@ Match.install = function(cos, util, cb) {
 		fields: {
 			title: { field_type: 'text' },
 			date: { field_type: 'date' },
+      homeGame: {field_type: 'boolean' },
 			season: { field_type: 'peer_object', object_type: 'custom:cm_season' },
 			description: { field_type: 'wysiwyg' },
 			players: { field_type: 'child_objects', object_type: 'custom:cm_player' }

@@ -2,6 +2,28 @@
 angular.module('pencilblueApp')
     .controller('MatchController', function($scope, $sce, statistics) {
     $scope.statistics = statistics;
+
+    let goals = 0;
+    let opponentGoals = 0;
+
+    for(let i = 0; i < $scope.match.stats.length; ++i) {
+      let stat = $scope.match.stats[i];
+      
+      if(stat.type === 'goal') {
+        ++goals;
+      }
+      else if(stat.type === 'opponent goal') {
+        ++opponentGoals;
+      }
+    }
+
+    if($scope.match.home_game) {
+      $scope.homeGoals = goals;
+      $scope.awayGoals = opponentGoals;
+    } else {
+      $scope.homeGoals = opponentGoals
+      $scope.awayGoals = goals
+    }
   });
 </script>
 
