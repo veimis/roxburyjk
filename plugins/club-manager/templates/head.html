@@ -1,9 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
-<html>
-  <head>
-    <script type="text/javascript" src="^angular_src^"></script>
-    <script type="text/javascript" src="^angular_route_src^"></script>
-    <script type="text/javascript" src="^angular_sanitize_src^"></script>
-    <link rel="stylesheet" type="text/css" href="^bootstrap_css_src^">
-		<title>^site_name^</title>
-  </head>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="pencilblueApp">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+        <title>^page_name^</title>
+        <meta name="description" content="^meta_desc^">
+        <meta property="og:locale" content="^meta_lang^"/>
+        <meta property="og:title" content="^meta_title^"/>
+        <meta property="og:description" content="^meta_desc^"/>
+        <meta property="og:url" content="^site_root^^current_url^"/>
+        <meta property="og:image" content="^meta_thumbnail^">
+        <meta property="og:site_name" content="^site_name^"/>
+        <meta property="og:type" content="article"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+        ^localized_alternate^
+        <link rel="shortcut icon" href="^site_icon^">
+
+        <link rel="stylesheet" type="text/css" href="^bootstrap_css_src^">
+        <link rel="stylesheet" type="text/css" href="^font_awesome_src^">
+        <link rel="stylesheet" type="text/css" href="/css/pencilblue_theme.css">
+
+        <script type="text/javascript" src="^jquery_src^"></script>
+        <script type="text/javascript" src="^bootstrap_js_src^"></script>
+        <script type="text/javascript" src="^angular_src^"></script>
+        <script type="text/javascript" src="^angular_route_src^"></script>
+        <script type="text/javascript" src="^angular_sanitize_src^"></script>
+        <script type="text/javascript" src="/js/media.js"></script>
+        ^localization_script^
+        ^analytics^
+    </head>
+    <body ng-controller="PencilBlueController">
+        <div id="wrap">
+            
+<nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar_collapse_1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a id="navbar_brand_mobile" class="navbar-brand" href="^site_root^" style="padding: .4em">
+            <img src="^site_logo^" style="max-height: 32px"></img>
+        </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbar_collapse_1">
+        <ul id="nav_items_mobile" class="nav navbar-nav navbar-fixed">
+            ^navigation^
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            ^account_buttons^
+        </ul>
+    </div>
+</nav>
+<div id="nav_desktop" class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <a href="^site_root^">
+            <img src="^site_logo^" style="max-height: 300px"></img>
+        </a>
+    </div>
+    <div class="col-md-8 col-md-offset-2">
+        <nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-inner">
+                <ul class="nav navbar-nav">
+                    ^navigation^
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.account_button a[data-toggle="tooltip"]').tooltip(
+            {
+                'placement': 'left'
+            }
+        ).css(
+            {
+                'cursor': 'pointer'
+            }
+        );
+    });
+</script>
+
