@@ -16,7 +16,7 @@ Match.install = function(cos, util, cb) {
 	var matchReport = {
 		name: dbName,
 		fields: {
-			title: { field_type: 'text' },
+			opponent: { field_type: 'text' },
 			date: { field_type: 'date' },
       homeGame: {field_type: 'boolean' },
 			season: { field_type: 'peer_object', object_type: 'custom:cm_season' },
@@ -42,7 +42,7 @@ Match.uninstall = function(cos, util, cb) {
 // cb = callback(err, data)
 Match.getAll = function(cos, util, cb) {
 	var options = {
-     selection: ['name', 'title', 'date', 'description', 'players', 'season']
+     selection: ['name', 'opponent', 'homeGame', 'date', 'description', 'players', 'season']
   };
 	cmUtils.queryCustomObjects(cos, util, dbName, options, function(err, data) {
     // Fetch all players for each match 
@@ -70,14 +70,14 @@ Match.loadBySeason = function(seasonId, cos, util, cb) {
 }
 
 // Query Match by name. Custom object name field is unique.
-// title:  Match title 
+// name:  Match name
 // cos: pencilblue custom object service instance
 // util: pencilblue utilites
 // cb = callback(error, data)
 // data:  {match, season, players}
-Match.loadByName = function(title, cos, util, cb) {
+Match.loadByName = function(name, cos, util, cb) {
   var options = {
-    where: {title: title}
+    where: {name: name}
   };
   
   cmUtils.queryCustomObjects(cos, util, dbName, options, function(err, match){

@@ -9,7 +9,7 @@
     <div class="list-group-item">
       {{stat.time}}{{stat.extraTime ? "+"+stat.extraTime : ''}}&apos;
       <i ng-class="statistics.getIcon(stat.type)"></i>
-      : {{stat.playerName}}
+      : {{stat.playerName ? stat.playerName : 'Opponent'}}
 
       <!-- For goals show button to add assists -->
       <div class="pull-right action-buttons">
