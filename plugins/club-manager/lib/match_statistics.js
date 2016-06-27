@@ -111,7 +111,7 @@ MatchStatistics.loadPlayerTotals = function(playerId, dao, util, cb) {
   async.parallel({
     goals: async.apply(countQuery, "goal"),
     assists: async.apply(countQuery, "assist"),
-    warnings: async.apply(countQuery, "waring"),
+    warnings: async.apply(countQuery, "warning"),
     penalties: async.apply(countQuery, "penalty")
   }, cb);
 };
