@@ -19,21 +19,28 @@ module.exports = function(pb) {
   // for the routes.
   ///////////////////////////////////////////////////////////////////
   MatchApiController.getRoutes = function(cb) {
-    const routes = [{
+    const routes = [
+    {
       method: "post",
       path: "/club-manager/api/stats",
       auth_required: true,
       content_type: 'application/json',
       request_body: ['application/json', 'application/x-www-form-urlencoded', 'multipart/form-data'],
       handler: 'saveStats'
-      }, {
+    }, {
       method: "post",
       path: "/club-manager/api/deleteStats",
       auth_required: true,
       content_type: 'application/json',
       request_body: ['application/json', 'application/x-www-from-urlencoded', 'multipart/form-data'],
       handler: 'deleteStats'
-    }];
+    }, {
+      path: "/club-manager/api/getstats/",
+      auth_required: false,
+      content_type: 'application/json',
+      handler: 'getStats'
+    }
+    ];
 
     cb(null, routes);
   };
@@ -65,5 +72,21 @@ module.exports = function(pb) {
     });
   };
 
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Get statistics for the given player.
+  //
+  /////////////////////////////////////////////////////////////////////
+  MatchApiController.prototype.getStats = function(cb) {
+    matchStats.loadPlayerTotals(this.query.player, new pb.DAO(), util, function(err, result) {
+      // Set response content: Send to the client.
+      const response = {
+        content: result
+      };
+
+      cb(response);
+    });
+  };
+  
   return MatchApiController;
 }

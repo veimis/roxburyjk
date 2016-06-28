@@ -1,6 +1,6 @@
 <script type="text/javascript">
   angular.module('pencilblueApp')
-    .controller('TeamController', function($scope, $sce, statistics) {
+    .controller('TeamController', function($scope, $sce, $http, statistics) {
       $scope.statistics = statistics;
       ^angular_objects^
 
@@ -10,7 +10,25 @@
         if(window.innerWidth < 768) {
           angular.element(document).find('#' + teamElementId).collapse('hide'); 
         }
+        
+        if(!player.stats) {
+          $scope.getPlayerStats(player);
+        }
       };
+
+      // Get player statistics
+      $scope.getPlayerStats = function(player) {
+        $http.get("/club-manager/api/getstats/?player=" + player._id)
+          .then(function(response) {
+            player.stats = response.data;
+          }
+        );
+      };
+    
+      // Will get stats for the preselected player.
+      // Stats are saved for the selected, not the actual player.
+      // On selecting a new player stats are requested.
+      $scope.getPlayerStats($scope.selected);
     });
 </script>
 

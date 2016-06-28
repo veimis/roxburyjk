@@ -28,6 +28,16 @@
       <!-- Player image -->
       <div class="col-sm-4">
         <img class="img-responsive" ng-src="{{selected.profilePicture.location}}" alt="profile image" />
+        <div ng-if="selected.stats" style="font-size:34px">
+          <i ng-class="statistics.getIcon('goal')"></i>
+          {{selected.stats.goals}}
+          <i ng-class="statistics.getIcon('assist')"></i>
+          {{selected.stats.assists}}
+          <i ng-class="statistics.getIcon('warning')"></i>
+          {{selected.stats.warnings}}
+          <i ng-class="statistics.getIcon('penalty')"></i>
+          {{selected.stats.penalties}}
+        </div>
       </div>
 
       <!-- Player description -->
