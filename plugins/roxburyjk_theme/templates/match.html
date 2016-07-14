@@ -1,0 +1,38 @@
+<div class="panel panel-roxbury" ng-controller="MatchController">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <a ng-href="/club-manager/season/?name={{match.season.name}}">
+		{{match.season.name}}
+	  </a>
+      : <a ng-href="/club-manager/match/?name={{match.name}}">{{match.name}}</a>
+    </h3>
+  </div>
+  <div class="panel-body">
+    <h6> {{match.date | date:'EEEE yyyy-MM-dd'}}</h6>
+    <section ng-bind-html="match.description"></section>
+    <div class="well text-center">
+      {{homeGoals}} - {{awayGoals}}
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item" ng-repeat="stat in match.stats | filter:{type: '!assist'} | orderBy:'time'">
+        {{stat.time}}
+        {{stat.extraTime ? "+" + stat.extraTime : ''}}&apos;
+        <i ng-class="statistics.getIcon(stat.type)"></i>
+        <a ng-if="stat.playerName" ng-href="/club-manager/player/?name={{stat.playerName}}">
+          {{stat.playerName}}
+        </a> 
+        <span ng-if="!stat.playerName">{{match.opponent}}</span>
+        <span ng-repeat="assist in match.stats | filter: {type: 'assist', goalId: stat._id}">
+          <i ng-class="statistics.getIcon(assist.type)"></i>
+          <a ng-href="/club-manager/player/?name={{assist.playerName}}">
+            {{assist.playerName}}
+          </a> 
+        </span>
+      </li>
+    <ul>
+ </div>
+</div>
+^tmp_angular=statsService^
+^tmp_angular=match^
+
+

@@ -21,6 +21,8 @@ plugins/*
 !plugins/wp_import/**
 !plugins/club-manager/
 !plugins/club-manager/**
+!plugins/roxburyjk_theme/
+!plugins/roxburyjk_theme/**
 **/node_modules
 **/node_modules/**
 config.json
