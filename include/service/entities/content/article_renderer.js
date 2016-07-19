@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2015  PencilBlue, LLC
+ Copyright (C) 2016  PencilBlue, LLC
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -37,10 +37,30 @@ module.exports = function(pb) {
      */
     function ArticleRenderer(context) {
         if (context) {
+
+            /**
+             * @property commentService
+             * @type {CommentService}
+             */
             this.commentService = new pb.CommentService(context);
+
+            /**
+             * @property hostname
+             * @type {string}
+             */
             this.hostname = context.hostname;
         }
+
+        /**
+         * @property site
+         * @type {string}
+         */
         this.site = pb.SiteService.getCurrentSite(context.site);
+
+        /**
+         * @property onlyThisSite
+         * @type {boolean}
+         */
         this.onlyThisSite = context.onlyThisSite;
 
         /**
@@ -215,12 +235,10 @@ module.exports = function(pb) {
             where: {
                 article: content[pb.DAO.getIdField()] + ''
             },
-            order: {
-                created: pb.DAO.ASC
-            }
+            order: [['created', pb.DAO.ASC]]
         };
         this.commentService.getAll(opts, function(err, comments) {
-            if(util.isError(err) || comments.length == 0) {
+            if(util.isError(err) || comments.length === 0) {
                 return cb(err);
             }
 
@@ -276,7 +294,7 @@ module.exports = function(pb) {
                 //user has not already commented so load
                 var dao = new pb.DAO();
                 dao.loadById(comment.commenter, 'user', function(err, commenter) {
-                    if(util.isError(err) || commenter == null) {
+                    if(util.isError(err) || commenter === null) {
                         callback(null, false);
                         return;
                     }
@@ -340,7 +358,7 @@ module.exports = function(pb) {
 
             // Cutoff the content at the right number of paragraphs
             for(i = 0; i < tempLayoutArray.length && i < contentSettings.auto_break_articles; i++) {
-                if(i === contentSettings.auto_break_articles - 1 && i != tempLayoutArray.length - 1) {
+                if(i === contentSettings.auto_break_articles - 1 && i !== tempLayoutArray.length - 1) {
 
                     newLayout += tempLayoutArray[i] + this.getReadMoreSpan(content, contentSettings.read_more_text) + breakString;
                     continue;
@@ -362,7 +380,8 @@ module.exports = function(pb) {
     /**
      * @method formatLayoutForReadMore
      * @param {Object} content
-     * @param {Objct} context
+     * @param {Object} context
+     * @param {boolean} context.readMore
      */
     ArticleRenderer.prototype.formatLayoutForReadMore = function(content, context) {
         var layout = this.getLayout(content);

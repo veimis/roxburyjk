@@ -1,64 +1,64 @@
-var config = {};
+/**
+ * This is a sample configuration meant to get users and up running on a local 
+ * machine.  The configuration will not support multi-process on a single 
+ * server or multi-server/elastic environments.  For more detailed information 
+ * on the options provided please refer to the /include/config.js file.
+ * 
+ * The file can be renamed to "config.js" in the same directory as this file 
+ * and it will be used as the configuration when PencilBlue is started.  If 
+ * this file is used then there is no need to create a "config.json"
+ */
 
-var env = process.env;
-if (env.OPENSHIFT_GEAR_DNS) {
-   var useMemory = {
-      "use_memory": true,
-      "use_cache": false
-   };
-   var useMemoryAndCache = {
-      "use_memory": true,
-      "use_cache": true
-   };
-   // OpenShift config settings
-   config = {
-      "siteName": "Roxbury JK",
-      "siteRoot": "http://" + env.OPENSHIFT_GEAR_DNS,
-      "siteIP": env.OPENSHIFT_NODEJS_IP,
-      "sitePort": env.OPENSHIFT_NODEJS_PORT,
-      "log_level": "info",
-      "db": {
-         "type": "mongo",
-         "servers": [
-            env.OPENSHIFT_MONGODB_DB_URL
-         ],
-         "name": env.OPENSHIFT_APP_NAME,
-         "writeConcern": 1
-      },
-      "settings": useMemory,
-      "templates": useMemory,
-      "plugins": {
-         "caching": useMemory
-      },
-      "media": {
-          "parent_dir": env.OPENSHIFT_DATA_DIR
-      }   
-    };
-   if (env.OPENSHIFT_HAPROXY_VERSION) {
-      // Scaled application
-      config.cluster = {
-         "self_managed": false
-      };
-   }
-} else {
-   // local dev settings
-   config = {
-      "siteName": "Roxbury JK local",
-      "siteRoot": "http://localhost:8080",
-      "siteIP": "0.0.0.0",
-      "sitePort": 8080,
-      "log_level": "info",
-      "db": {
-         "type": "mongo",
-         "servers": [
-            "mongodb://localhost:27017/pencilblue/"
-         ],
-         "name": "pencilblue",
-         "writeConcern": 1
-      }
-   }
-
-}
-
-module.exports = config;
-;
+module.exports = {
+    "siteName": "Roxbury JK",
+    "siteRoot": "http://127.0.0.1:8080",
+    "sitePort": 8080,
+    "logging": {
+        "level": "info"
+    },
+    "db": {
+        "type":"mongo",
+        "servers": [
+          "127.0.0.1:27017"
+        ],
+        "name": "club",
+        "writeConcern": 1
+    },
+    "cache": {
+        "fake": true,
+        "host": "localhost",
+        "port": 6379
+    },
+    "settings": {
+        "use_memory": false,
+        "use_cache": false
+    },
+    "templates": {
+        "use_memory": false,
+        "use_cache": false
+    },
+    "plugins": {
+        "caching": {
+            "use_memory": false,
+            "use_cache": false
+        }
+    },
+    "registry": {
+        "type": "mongo"
+    },
+    "session": {
+        "storage": "mongo"
+    },
+    "media": {
+        "provider": "mongo",
+        "max_upload_size": 6 * 1024 * 1024
+    },
+    "cluster": {
+        "workers": 1,
+        "self_managed": false 
+    },
+    multisite: {
+        enabled: false,
+        globalRoot: 'http://global.localhost:8080'
+    }
+};

@@ -111,6 +111,7 @@ module.exports = function(pb) {
           matches: results.matches,
           team: results.team.name
         };
+      console.log(results.matches.length);
 
         var angularData = pb.ClientJs.getAngularController(objects, ['ngSanitize']);
         cb(null, angularData);
