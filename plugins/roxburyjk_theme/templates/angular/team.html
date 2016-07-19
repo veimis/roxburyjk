@@ -1,0 +1,21 @@
+<script type="text/javascript">
+  angular.module('pencilblueApp')
+    .controller('TeamController', function($scope, $sce, $sanitize) {
+     ^angular_objects^
+
+      $scope.isArticle = function(post) {
+        if(post.object_type === 'article') {
+          return true;
+        }
+        else
+        {
+          // Match template uses the name match instaed of post.
+          $scope.match = post;
+          return false;
+        }
+      };
+    });
+</script>
+
+
+

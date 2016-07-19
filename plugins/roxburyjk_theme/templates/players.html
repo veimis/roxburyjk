@@ -1,0 +1,82 @@
+^tmp_head^
+<div class="container" ng-controller="PlayersController">
+  <div class="row">
+     
+    <div class="col-sm-3">
+      <div>
+        ^tmp_logo^
+      </div>
+      <ul class="nav nav-pills nav-stacked">
+       <li ng-if="teams.length === 1">
+          <a ng-href="/club-manager/?team={{teams[0].name}}">
+            Joukkue 
+          </a>
+        </li>
+      </ul>
+
+      <!-- List players of each team -->
+      <div class="list-group" ng-repeat="team in teams">
+        <a class="list-group-item list-group-item-team" 
+          data-toggle="collapse"
+          ng-href="#{{team._id}}"
+        >
+          {{team.name}}
+        </a>
+        <!-- list of players -->
+        <div id="{{team._id}}" class="panel-collapse collapse">
+          <a class="list-group-item" 
+            href="#" 
+            ng-repeat="player in team.players | orderBy: 'name'" 
+            ng-click="showDetails(player, team._id)"
+          >
+            {{player.name}} #{{player.number}}
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-9">
+      
+      <div class="row">
+        <!-- Player image -->
+        <div class="col-sm-5">
+          <img class="img-responsive" 
+            ng-src="{{selected.profilePicture.location}}" 
+            alt="profile image" />
+          <div ng-if="selected.stats" class="statistics">
+            <i ng-class="statistics.getIcon('goal')"></i>
+            {{selected.stats.goals}}
+            <i ng-class="statistics.getIcon('assist')"></i>
+            {{selected.stats.assists}}
+            <i ng-class="statistics.getIcon('warning')"></i>
+            {{selected.stats.warnings}}
+            <i ng-class="statistics.getIcon('penalty')"></i>
+            {{selected.stats.penalties}}
+          </div>
+        </div>
+
+        <!-- Player description -->
+        <div class="col-sm-7">
+          <div ng-show="selected" class="ng-hide panel panel-roxbury">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <a ng-href="/club-manager/player/?name={{selected.name}}">
+                  {{selected.name}} #{{selected.number}}
+                </a>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <section ng-bind-html="selected.description"></section>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+^angular^
+^tmp_angular=statsService^
+^tmp_angular=players^
+^tmp_footer^
