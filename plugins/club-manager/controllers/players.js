@@ -94,8 +94,19 @@ module.exports = function(pb) {
   PlayersController.prototype.preSelectPlayer = function(teams, angularData, playerName) {
     // Preselect player by query parameter
     if(playerName !== undefined) {
-      for(var i = 0; i < teams.length; ++i) {
-        const selected = teams[i].players.find(findPlayer, playerName);
+      for(var i = 0; i < teams.length; ++i) { 
+        // Can't use array.find(func) since openshift server has 
+        // node version 0.10.x which does not implement it.
+        //const selected = teams[i].players.find(findPlayer, playerName);
+
+        var selected = undefined;
+        for(var j = 0; j < teams[i].players.length; ++j) {
+          if(teams[i].players[j].name === playerName) {
+            selected = teams[i].players[j];
+            break;
+          }
+        }
+
         if(selected !== undefined) {
           angularData.selected = selected;
           break;
