@@ -31,7 +31,7 @@
             <tr ng-repeat="player in match.players">
             <th>{{player.number}}</th>
             <th>
-              <a ng-href="/club-manager/player/?name={{player.name}}">
+              <a ng-href="/club-manager/players?team={{team}}&player={{player.name}}">
                 {{player.name}}
               </a>
             </th>

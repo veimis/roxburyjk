@@ -15,6 +15,25 @@ module.exports = function(pb) {
   util.inherits(PlayersController, pb.BaseController);
 
   ///////////////////////////////////////////////////////////////////
+  // Register routes
+  // Pencilblue will call getRoutes() for each controller in the
+  // controllers folder during initialization to regiser handlers
+  // for the routes.
+  ///////////////////////////////////////////////////////////////////
+  PlayersController.getRoutes = function(cb) {
+    var routes = [
+      {
+        method: 'get',
+        path: '/club-manager/players',
+        auth_required: false,
+        content_type: 'text/html'
+        // handler is not defined, defaults to render()
+      }
+    ];
+    cb(null, routes);
+  };
+
+  ///////////////////////////////////////////////////////////////////
   // Render team template
   // Render is executed within a domain context and errors thrown 
   //  will result in an error page.
@@ -41,10 +60,7 @@ module.exports = function(pb) {
         };
         
         // Pre select player if available.
-        if(data.length > 0 && data[0].players.length > 0)
-        {
-          angularData.selected = data[0].players[0];
-        }
+        self.preSelectPlayer(data, angularData, self.query.player);
 
         // Register angular objects for the template
         var angularObjects = pb.ClientJs.getAngularObjects(angularData);
@@ -68,24 +84,44 @@ module.exports = function(pb) {
   };
   
   ///////////////////////////////////////////////////////////////////
-  // Register routes
-  // Pencilblue will call getRoutes() for each controller in the
-  // controllers folder during initialization to regiser handlers
-  // for the routes.
+  //
+  // See if a player can be preslected.
+  // teams: Array of teams that will be shown.
+  // angularData: Data object that will be given to angularjs scope.
+  // playerName: Player name from query parameter.
+  //
   ///////////////////////////////////////////////////////////////////
-  PlayersController.getRoutes = function(cb) {
-    var routes = [
-      {
-        method: 'get',
-        path: '/club-manager/players',
-        auth_required: false,
-        content_type: 'text/html'
-        // handler is not defined, defaults to render()
+  PlayersController.prototype.preSelectPlayer = function(teams, angularData, playerName) {
+    // Preselect player by query parameter
+    if(playerName !== undefined) {
+      for(var i = 0; i < teams.length; ++i) {
+        const selected = teams[i].players.find(findPlayer, playerName);
+        if(selected !== undefined) {
+          angularData.selected = selected;
+          break;
+        }
       }
-    ];
-    cb(null, routes);
+    }
+
+    // Preselected first player in the first team
+    if(angularData.selected === undefined &&
+      teams.length > 0 
+      && teams[0].players.length > 0)
+    {
+      angularData.selected = teams[0].players[0];
+    }
   };
- 
+
+  ///////////////////////////////////////////////////////////////////
+  // 
+  // Compare function to find the correct player.
+  // Compare the names of the players.
+  //
+  ///////////////////////////////////////////////////////////////////
+  function findPlayer(player) {
+    return player.name === String(this);
+  };
+
   ///////////////////////////////////////////////////////////////////
   // Get navigation
   // Copy from pencilblue/controllers/index.js
