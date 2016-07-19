@@ -3,7 +3,7 @@
   "name": "Roxbury JK theme",
   "description": "Theme for Roxbury JK pencilblue site with club manager plugin.",
   "version": "0.0.1",
-	"pb_version": "0.5.x",
+	"pb_version": "0.6.x",
   "icon": "/imgs/sample.ico",
   "author": {
     "name": "Ilkka Veima",

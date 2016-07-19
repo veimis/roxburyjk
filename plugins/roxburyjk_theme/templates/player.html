@@ -1,52 +1,52 @@
 ^tmp_head^
-  <div class="container" ng-controller="PlayerController">
-    <div class="row">
-      <div class="col-sm-3">
-        ^tmp_logo^
-      </div>
-      <div class="col-sm-9">
-        <div class="row">
-          <div class="col-sm-12">
-            <nav class="navbar navbar-inverse nav-roxbury" role="navigation">
-              <ul class="nav navbar-nav navbar-inverse">
-                ^navigation^
-              </ul>
-            </nav>
-          </div>
+<div class="container" ng-controller="PlayerController">
+  <div class="row">
+    <div class="col-sm-3">
+      ^tmp_logo^
+    </div>
+    <div class="col-sm-9">
+      <div class="row">
+        <div class="col-sm-12">
+          ^tmp_navigation^ 
         </div>
-        <div class="row">
-          <div class="col-sm-5">
-            <img class="img-responsive" ng-src="{{player.profilePicture}}" alt="profile image" />
-            <div class="statistics">
-              <i ng-class="statistics.getIcon('goal')"></i>
-              {{player.stats.goals}}
-              <i ng-class="statistics.getIcon('assist')"></i>
-              {{player.stats.assists}}
-              <i ng-class="statistics.getIcon('warning')"></i>
-              {{player.stats.warnings}}
-              <i ng-class="statistics.getIcon('penalty')"></i>
-              {{player.stats.penalties}}
-            </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-5">
+          <img class="img-responsive" 
+            ng-src="{{player.profilePicture}}" 
+            alt="profile image" />
+
+          <div class="statistics">
+            <i ng-class="statistics.getIcon('goal')"></i>
+            {{player.stats.goals}}
+            <i ng-class="statistics.getIcon('assist')"></i>
+            {{player.stats.assists}}
+            <i ng-class="statistics.getIcon('warning')"></i>
+            {{player.stats.warnings}}
+            <i ng-class="statistics.getIcon('penalty')"></i>
+            {{player.stats.penalties}}
           </div>
-          <div class="col-sm-7">
-            <div class="panel panel-roxbury">
-              <div class="panel-heading">
-                <span class="panel-title">
-                  {{player.name}} #{{player.number}}
-                </span>
-              </div>
-              <div class="panel-body">
-                <p ng-bind-html="player.description"></p>
-              </div>
+
+        </div>
+        <div class="col-sm-7">
+          <div class="panel panel-roxbury">
+            <div class="panel-heading">
+              <span class="panel-title">
+                {{player.name}} #{{player.number}}
+              </span>
+            </div>
+            <div class="panel-body">
+              <p ng-bind-html="player.description"></p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  ^angular^
-  ^tmp_angular=statsService^
-  ^tmp_angular=player^
+</div>
+^angular^
+^tmp_angular=statsService^
+^tmp_angular=player^
 ^tmp_footer^
 
 

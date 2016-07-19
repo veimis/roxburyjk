@@ -4,14 +4,16 @@
       <a ng-href="/club-manager/season/?name={{match.season.name}}">
 		{{match.season.name}}
 	  </a>
-      : <a ng-href="/club-manager/match/?name={{match.name}}">{{match.name}}</a>
+      > <a ng-href="/club-manager/match/?name={{match.name}}">{{match.name}}</a>
     </h3>
   </div>
   <div class="panel-body">
     <h6> {{match.date | date:'EEEE yyyy-MM-dd'}}</h6>
     <section ng-bind-html="match.description"></section>
     <div class="well text-center">
-      {{homeGoals}} - {{awayGoals}}
+      {{match.home_game ? 'Roxbury JK' : match.opponent}} 
+        <span class="score">{{homeGoals}} - {{awayGoals}}</span> 
+      {{match.home_game ? match.opponent : 'Roxbury JK'}}
     </div>
     <ul class="list-group">
       <li class="list-group-item" ng-repeat="stat in match.stats | filter:{type: '!assist'} | orderBy:'time'">

@@ -38,6 +38,13 @@ a.list-group-item:hover {
     .statistics {
       font-size: 26px; } }
 
+.score {
+  font-weight: bold; }
+
+/* Dropdown menu */
+.dropdown-menu {
+  background-color: #999999; }
+
 /* Landingpage layout media queries
  * Display large or small landingpage
  * depending on the screen width.
