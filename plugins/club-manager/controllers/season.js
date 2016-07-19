@@ -1,11 +1,12 @@
 // Controller module for a season showing the match reports of the season
 
 // Dependencies
-var cmSeason = require('../lib/season.js');
-var cmMatch = require('../lib/match.js');
-var cmUtils = require('../lib/club_manager_utils.js');
-var cmMatchStats = require('../lib/match_statistics.js');
-var async = require('async');
+const cmSeason = require('../lib/season.js');
+const cmMatch = require('../lib/match.js');
+const cmUtils = require('../lib/club_manager_utils.js');
+const cmMatchStats = require('../lib/match_statistics.js');
+const cmTeam = require('../lib/team.js');
+const async = require('async');
 
 module.exports = function(pb) {
 	// Pencilblue dependencies
@@ -44,35 +45,36 @@ module.exports = function(pb) {
   ///////////////////////////////////////////////////////////////////
 	SeasonController.prototype.render = function(cb) {	
 		var self = this;
+    
+    if(util.isNullOrUndefined(self.query.name)) {
+      throw new Error("Season name is not specified in the url query");
+    }
+
 		var cos = new pb.CustomObjectService();
 
-    if(self.query.name) {
-	  async.waterfall([
-	    function(cb) {
-          cmSeason.loadByName(self.query.name, cos, util, cb);
-		},
-		function(season, cb) {
-		  cmMatch.loadBySeason(season._id, cos, util, cb);
-		},
-		function(matches, cb) {
-		  getStats(self, matches, new pb.DAO(), util, cb);
-		}
-	  ], function(err, matches) {
-	    renderSeason(self, matches, util, cmUtils, cb);
-	  });
-    }
-    else
-    {
-      cmMatch.getAll(cos, util, function(err, matches) {
-        if(util.isError(err)) {
-          throw err;
-        }
-        getStats(self, matches, new pb.DAO(), util, function(err, matches) {
-          renderSeason(self, matches, util, cmUtils, cb);
+    async.waterfall([
+      function(cb) {
+        cmSeason.loadByName(self.query.name, cos, util, cb);
+      },
+      function(season, cb) {
+        async.parallel({
+          matches: function(parallelCb) {
+            cmMatch.loadBySeason(season._id, cos, util, parallelCb);
+          },
+          team: function(parallelCb) {
+            cmTeam.getById(season.team, cos, util, parallelCb);
+          } 
+        }, cb);
+      },
+      function(results, cb) {
+        getStats(self, results.matches, new pb.DAO(), util, function(err, matches) {
+          cb(null, results);
         });
-      });
-    }
-	};
+      }
+    ], function(err, results) {
+      renderSeason(self, results, util, cmUtils, cb);
+    });
+  };
 
   ///////////////////////////////////////////////////////////////////
   // Get match stats for given matches.
@@ -102,11 +104,12 @@ module.exports = function(pb) {
   // cmUtils: Club manager utilities
   // cb = callback(result)
   ///////////////////////////////////////////////////////////////////
-  function renderSeason(controller, matches, util, cmUtils, cb) {
+  function renderSeason(controller, results, util, cmUtils, cb) {
     cmUtils.defaultTemplateValues(pb, controller, function(err) {
       var ok = controller.ts.registerLocal('angular', function(flag, cb){
         var objects = {
-          matches: matches
+          matches: results.matches,
+          team: results.team.name
         };
 
         var angularData = pb.ClientJs.getAngularController(objects, ['ngSanitize']);

@@ -49,7 +49,7 @@ module.exports = function(pb) {
             access: self.session.authentication.admin_level,
             tabs: self.getTabs(),
           };
-          var angularData = pb.ClientJs.getAngularController(objects, ['ui.bootstrap']);
+          var angularData = pb.ClientJs.getAngularController(objects, ['ngSanitize', 'ui.bootstrap']);
           cb(null, angularData);
         }); 
         cb(null, adminData);

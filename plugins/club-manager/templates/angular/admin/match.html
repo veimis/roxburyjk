@@ -28,7 +28,7 @@
     $scope.addStat = function() {
       const newStat = {
         "type": $scope.statType,
-        "matchId": $scope.selected._id,
+        "matchId": $scope.selected._id
       };
 
       if($scope.statType !== 'opponent goal') {
@@ -55,7 +55,9 @@
           // Set stat id that was returned by the server.
           newStat._id = response.data;
           $scope.selected.stats.push(newStat);
-        } 
+        }, function(response) {
+          console.log("Failed to upload stats.");
+        }
       );
     };
 

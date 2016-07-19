@@ -1,6 +1,8 @@
 // Inherit from pb base api controller
 
 const matchStats = require('../../lib/match_statistics.js');
+const Ajv = require('ajv');
+const fs = require('fs');
 
 module.exports = function(pb) {
   // Pencilblue dependencies
@@ -51,13 +53,30 @@ module.exports = function(pb) {
   //
   ///////////////////////////////////////////////////////////////////
   MatchApiController.prototype.saveStats = function(cb) {
-    matchStats.save(this.body, new pb.DAO(), util, function(err, result) {
-      // Set response content: Send to the client.
-      const response = {
-        content: result._id
-      };
+    const data = this.body;
+    const ajv = new Ajv();
 
-      cb(response);
+    // Get schema
+    // TODO: Ajv caches the schema, but we are reading the file everytime
+    fs.readFile('plugins/club-manager/schemas/saveStats.json', function(err, schemaBuffer) {
+      const schema = JSON.parse(schemaBuffer);
+      const valid = ajv.validate(schema, data);
+      if(!valid) {
+        cb({
+          code: 400,
+          content: ajv.errors
+        });
+      }
+      else {
+        matchStats.save(data, new pb.DAO(), util, function(err, result) {
+          // Set response content: Send to the client.
+          const response = {
+            content: result._id
+          };
+
+          cb(response);
+        });
+      }
     });
   };
 

@@ -155,6 +155,33 @@ clubManagerUtils.defaultTemplateValues = function(pb, controller, cb) {
  
     cb(err);
   });
-};  
+}; 
+
+///////////////////////////////////////////////////////////////////
+//
+// Get navigation. Navigation is set up in the admin interface.
+// Copy from pencilblue/controllers/index.js
+// 
+// controller: the caller controller: Used for request details.
+// pb: pencilblue object
+// cb: callback(themeSettings, navigation, accountButtons)
+// 
+///////////////////////////////////////////////////////////////////
+clubManagerUtils.getNavigation = function(controller, pb, cb) {
+  var options = {
+      currUrl: controller.req.url,
+      session: controller.session,
+      ls: controller.ls,
+      activeTheme: controller.activeTheme
+  };
+  
+  const menuService = new pb.TopMenuService();
+  menuService.getNavItems(options, function(err, navItems) {
+    if (pb.util.isError(err)) {
+        pb.log.error('Index: %s', err.stack);
+    }
+    cb(navItems.themeSettings, navItems.navigation, navItems.accountButtons);
+  });
+};
 
 module.exports = clubManagerUtils;

@@ -1,9 +1,11 @@
 // Controller module for the match 
 
 // Dependencies
-var cmUtils = require('../lib/club_manager_utils.js');
-var cmMatch = require('../lib/match.js');
-var cmMatchStats = require('../lib/match_statistics.js');
+const cmUtils = require('../lib/club_manager_utils.js');
+const cmMatch = require('../lib/match.js');
+const cmMatchStats = require('../lib/match_statistics.js');
+const cmTeam = require('../lib/team.js');
+const async = require('async');
 
 module.exports = function(pb) {
   // Pencilblue dependencies
@@ -27,26 +29,39 @@ module.exports = function(pb) {
     var self = this;
     var cos = new pb.CustomObjectService();
     
-    // Query data
-    cmMatch.loadByName(self.query.name, cos, util, function(err, data) {
-      cmMatchStats.loadByMatch(data[0]._id, new pb.DAO(), util, function(err, stats) {
-        // Register angular objects for match controller
-        var angularData = {
-          match: data[0],
-        };
-        angularData.match.stats = stats;
+    async.waterfall([
+      function(waterfallCb) {
+        cmMatch.loadByName(self.query.name, cos, util, waterfallCb);
+      },
+      function(matches, waterfallCb) {
+        cmMatchStats.loadByMatch(matches[0]._id, new pb.DAO(), util, function(err, stats) {
+          var match = matches[0];
+          match.stats = stats;
+          waterfallCb(err, match);
+        });
+      },
+      function(match, waterfallCb) {
+        cmTeam.getById(match.season.team, cos, util, function(error, team) {
+          const results = {
+            match: match,
+            team: team.name
+          };
 
-        var angularObjects = pb.ClientJs.getAngularObjects(angularData);
-        self.ts.registerLocal('angular_objects', new pb.TemplateValue(angularObjects, false));
+          waterfallCb(error, results);
+        });
+      }
+    ], function(error, results) {
+      // Register angular objects for match controller
+      var angularObjects = pb.ClientJs.getAngularObjects(results);
+      self.ts.registerLocal('angular_objects', new pb.TemplateValue(angularObjects, false));
 
-        cmUtils.defaultTemplateValues(pb, self, function(err) {
-          self.ts.load('matchStandAlone', function(err, result) {
-            if(util.isError(err)) {
-              throw err;
-            }
+      cmUtils.defaultTemplateValues(pb, self, function(err) {
+        self.ts.load('matchStandAlone', function(err, result) {
+          if(util.isError(err)) {
+            throw err;
+          }
 
-            cb({content: result});
-          });
+          cb({content: result});
         });
       });
     });

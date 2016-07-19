@@ -14,7 +14,7 @@
   <div class="row" ng-show="selected._id">
     <div class="col-md-6">
       <h1>Match: {{selected.title}}</h1>
-      <p>{{selected.description}}</p>
+      <p ng-bind-html="selected.description"></p>
     </div>
     <div class="col-md-6">
       <h1>Statistics</h1>

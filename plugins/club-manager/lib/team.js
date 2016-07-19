@@ -33,15 +33,38 @@ Team.uninstall = function(cos, util, cb) {
 	return cmUtils.removeCustomObjectType(cos, util, dbName, cb); 
 };
 
+// Get team database identifier
+// cos = pencilblue custom object service
+// util = pencilblue utilities
+// teamName: Name of the team
+// cb = callback(error, result)
+Team.getId = function(cos, util, teamName, cb) {
+  const options = {
+    select: { '_id': true },
+    where: { name: teamName } 
+  };
+
+  cmUtils.queryCustomObjects(cos, util, dbName, options, function(err, result) {
+    cb(null, result[0]._id);
+  });
+}
+
 // Query all player objecst from the database.
+// teamName: Name of the team, if null: get all teams.
 // cos = pencilblue custom object service
 // util = pencilblue utitilities
 // ms = pencilblue media service
 // cb = callback(err, data)
-Team.getAll = function(cos, util, ms, cb) {
-	var selection = ['name', 'description', 'players'];
+Team.getAll = function(teamName, cos, util, ms, cb) {
+  const options = {
+    select: {'name': true, 'players': true}
+  };
 
-	cmUtils.queryCustomObjects(cos, util, dbName, selection, function(err, data) {
+  if(!util.isNullOrUndefined(teamName)) {
+    options.where = {'name': teamName};
+  }
+
+	cmUtils.queryCustomObjects(cos, util, dbName, options, function(err, data) {
     // Get team custom object type id and fetch children (players) for each team
     cmUtils.getCustomObjectTypeId(cos, util, dbName, function(err, typeId) {
       async.each(data, function(team, cb) {
@@ -64,6 +87,15 @@ Team.getAll = function(cos, util, ms, cb) {
       });
     });
   });
+};
+
+// Get team by team database id
+// teamId: Team database identifier
+// cos = pencilblue custom object service
+// util = pencilblue utilities
+// cb = callback(error, data)
+Team.getById = function(teamId, cos, util, cb) {
+  cos.loadById(teamId, cb);
 };
       
 module.exports = Team;

@@ -1,0 +1,36 @@
+{
+  "title": "Statistics",
+  "description": "Save statistics schema",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Statistics type: goal, assist, warning, penalty",
+      "type": "string"
+    },
+    "matchId": {
+      "description": "Reference to match.",
+      "type": "string"
+    },
+    "playerId": {
+      "description": "Player reference. Not used in opponent goals.",
+      "type": "string"
+    },
+    "playerName": {
+      "description": "Name of the player. Not used in opponent goals.",
+      "type": "string"
+    },
+    "time": {
+      "description": "Game time of the statistics event. Not used with assist type.",
+      "type": "integer"
+    },
+    "extraTime": {
+      "description": "Additional extra time if statistics event happened during extra time. Not used with assit type.",
+      "type": "integer"
+    },
+    "goalId": {
+      "description": "Reference to a goal when stats type is assist.",
+      "type": "string"
+    }
+  },
+  "required": ["type", "matchId"]
+}

@@ -55,4 +55,17 @@ Season.uninstall = function(cos, util, cb) {
 	return cmUtils.removeCustomObjectType(cos, util, dbName, cb); 
 };
 
+// Get season objects by team reference.
+// cos = pencilblue custom object service
+// util = pencilblue utilities
+// teamId: Team database identifier
+// cb = callback(error, results)
+Season.getByTeam = function(cos, util, teamId, cb) {
+  const opts = {
+    where: { team: teamId }
+  };
+
+  cmUtils.queryCustomObjects(cos, util, dbName, opts, cb);
+};
+
 module.exports = Season;
