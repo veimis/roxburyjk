@@ -25,6 +25,7 @@ plugins/*
 !plugins/roxburyjk_theme/**
 **/node_modules
 **/node_modules/**
+**/bower_components/**
 config.json
 **/.DS_Store
 **/dump.rdb
