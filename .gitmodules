@@ -1,3 +1,6 @@
 [submodule "plugins/club-manager"]
 	path = plugins/club-manager
 	url = https://github.com/veimis/club-manager.git
+[submodule "plugins/roxburyjk-theme"]
+	path = plugins/roxburyjk-theme
+	url = https://github.com/veimis/roxburyjk-theme.git
