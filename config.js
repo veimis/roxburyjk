@@ -51,9 +51,9 @@ if (env.OPENSHIFT_GEAR_DNS) {
       "db": {
          "type": "mongo",
          "servers": [
-            "mongodb://localhost:27017/pencilblue/"
+            "mongodb://localhost:27017"
          ],
-         "name": "pencilblue",
+         "name": "club",
          "writeConcern": 1
       }
    }
